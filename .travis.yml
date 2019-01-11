@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build antyk/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run antyk/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t antyk/multi-docker-client ./client
+  - docker build -t antyk/multi-docker-nginx  ./nginx
+  - docker build -t antyk/multi-docker-server ./server
+  - docker build -t antyk/multi-docker-worker ./worker
+
+  - echo "$DOCKER_PASS" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push antyk/multi-docker-client
+  - docker push antyk/multi-docker-nginx
+  - docker push antyk/multi-docker-server
+  - docker push antyk/multi-docker-worker
+
+  
