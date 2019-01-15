@@ -1,0 +1,36 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "client",
+      "image": "antyk/multi-docker-client",
+      "hostname": "client",
+      "essential": false
+    },
+    {
+      "name": "api",
+      "image": "antyk/multi-docker-server",
+      "hostname": "api",
+      "essential": false
+    },
+    {
+      "name": "worker",
+      "image": "antyk/multi-docker-worker",
+      "hostname": "worker",
+      "essential": false
+    },
+    {
+      "name": "nginx",
+      "image": "antyk/multi-docker-nginx",
+      "hostname": "nginx",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80  
+        }
+      ],
+      "links": ["client", "server"]
+    }
+  ]
+}
